@@ -11,7 +11,7 @@ const useContract = <Type extends Contract = Contract>(address: string, ABI: any
     }
 
     try {
-      return new Contract(address, ABI, library.getSigner(account as string));
+      return new Contract(address, ABI, library.getSigner());
     } catch (error) {
       throw Error("Failed To Get Contract");
     }
