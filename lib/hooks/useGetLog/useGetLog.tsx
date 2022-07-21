@@ -13,27 +13,49 @@ const useGetLog = () => {
   const { library } = useWeb3();
   const [receipt, setReceipt] = useState<any>();
   const [logs, setLogs] = useState<any>();
+  const [errors, setErrors] = useState<any>();
 
   const getReceipt = useCallback(
     async ({ contractAddress, transaction, abi }: GetLogProps) => {
+      setErrors(undefined);
+      setLogs(undefined);
+      setReceipt(undefined);
+
       if (!contractAddress || !abi || !library || !transaction) {
         return null;
       }
       try {
-        const contract = new Contract(contractAddress, abi, library.getSigner());
         const receipt = await library.getTransactionReceipt(transaction);
         setReceipt(receipt);
+
         let iface = new ethers.utils.Interface(abi);
-        let log = iface.parseLog(receipt.logs[2]);
-        setLogs(log);
+        if (receipt.logs.length === 0) return;
+
+        let parsedEvents = [];
+
+        for (let event of receipt.logs) {
+          try {
+            const ethersParsed = iface.parseLog(event);
+            parsedEvents.push(ethersParsed);
+          } catch (error) {
+            setLogs(undefined);
+            setReceipt(undefined);
+            setErrors(error);
+          }
+        }
+
+        setLogs(parsedEvents);
       } catch (error) {
         console.error(error);
+        setLogs(undefined);
+        setReceipt(undefined);
+        setErrors(error);
       }
     },
     [library]
   );
 
-  return { getReceipt, receipt, logs };
+  return { getReceipt, receipt, logs, errors };
 };
 
 export default useGetLog;

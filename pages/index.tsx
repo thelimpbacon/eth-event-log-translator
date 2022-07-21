@@ -10,7 +10,7 @@ type Inputs = {
 
 export default function Home() {
   const { register, handleSubmit } = useForm<Inputs>();
-  const { getReceipt, receipt, logs } = useGetLog();
+  const { getReceipt, receipt, logs, errors } = useGetLog();
 
   const onSubmit: SubmitHandler<Inputs> = (data) => {
     getReceipt(data);
@@ -34,14 +34,16 @@ export default function Home() {
           </div>
 
           <button type="submit">submit</button>
+
+          <div className="text-red-600 mt-6">{JSON.stringify(errors, null, 2)}</div>
         </form>
       </div>
       <div className="grid grid-cols-2 col-span-2">
         <div className="border border-gray-500 whitespace-pre-wrap overflow-hidden">
-          {JSON.stringify(receipt, null, 4)}
+          {JSON.stringify(receipt, null, 2)}
         </div>
         <div className="border border-gray-500 whitespace-pre-wrap overflow-hidden">
-          {JSON.stringify(logs, null, 4)}
+          {JSON.stringify(logs, null, 2)}
         </div>
       </div>
     </div>
