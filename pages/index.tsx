@@ -1,8 +1,7 @@
-import React, { useState } from "react";
+import React from "react";
 import { useForm, SubmitHandler, FormProvider } from "react-hook-form";
-import { useGetLog } from "@lib/hooks";
-import { AbiTextArea, CustomInput } from "@components/common";
 import { isAddress } from "ethers/lib/utils";
+import { useGetLog } from "@lib/hooks";
 
 export type FormInputs = {
   contractAddress: string;
@@ -27,34 +26,56 @@ export default function Home() {
       <div>
         <form className="flex flex-col gap-4 col-span-1" onSubmit={handleSubmit(onSubmit)}>
           <div className="flex flex-col">
-            <CustomInput
-              label="Contract address"
+            <label className="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-400">
+              Contract address
+            </label>
+            <input
+              className="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
               placeholder="0x90b1cba89ecc85d950c4ca4ae0e077fcabb19f93"
               {...register("contractAddress", {
                 required: { value: true, message: "This is required" },
                 validate: { validAddress: (value) => isAddress(value) || "Invalid address" },
               })}
-              error={formErrors.contractAddress?.message}
             />
+
+            <span className="flex items-center font-medium tracking-wide text-red-500 text-xs mt-1 ml-1">
+              {formErrors.contractAddress?.message}
+            </span>
           </div>
+
           <div className="flex flex-col">
-            <CustomInput
-              label="Transaction hash"
+            <label className="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-400">
+              Transaction hash
+            </label>
+            <input
+              className="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
               placeholder="0x601f30208c2e1bc28649ce37433e44a0ea4e6d4da38420dbd1b3ecf2694ed98f"
               {...register("transactionHash", {
                 required: { value: true, message: "This is required" },
-                validate: { validAddress: (value) => isAddress(value) || "Invalid address" },
               })}
-              error={formErrors.transactionHash?.message}
             />
+
+            <span className="flex items-center font-medium tracking-wide text-red-500 text-xs mt-1 ml-1">
+              {formErrors.transactionHash?.message}
+            </span>
           </div>
+
           <div className="flex flex-col">
-            <AbiTextArea
+            <label className="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-400">
+              Contract ABI
+            </label>
+            <textarea
+              rows={15}
+              className="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+              placeholder={sampleABI}
               {...register("abi", {
                 required: { value: true, message: "This is required" },
               })}
-              error={formErrors.abi?.message}
             />
+
+            <span className="flex items-center font-medium tracking-wide text-red-500 text-xs mt-1 ml-1">
+              {formErrors.abi?.message}
+            </span>
           </div>
 
           <button
@@ -67,7 +88,6 @@ export default function Home() {
 
         <div className="text-red-600 mt-6">{JSON.stringify(errors, null, 2)}</div>
       </div>
-
       <div className="grid grid-cols-2 col-span-2">
         <div className="border border-gray-500 whitespace-pre-wrap overflow-hidden">
           {JSON.stringify(receipt, null, 2)}
@@ -79,3 +99,26 @@ export default function Home() {
     </div>
   );
 }
+
+const sampleABI = `[
+  {
+    inputs: [],
+    name: "getCount",
+    outputs: [
+      {
+        internalType: "uint256",
+        name: "",
+        type: "uint256",
+      },
+    ],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [],
+    name: "increment",
+    outputs: [],
+    stateMutability: "nonpayable",
+    type: "function",
+  },
+]`;
