@@ -24,7 +24,7 @@ export default function Home() {
   };
 
   return (
-    <div className="h-[90vh] grid w-full grid-cols-3 text-white gap-6">
+    <div className="md:h-[90vh] grid w-full grid-cols-1 lg:grid-cols-3 text-white gap-6">
       <div>
         <form className="flex flex-col gap-4 col-span-1" onSubmit={handleSubmit(onSubmit)}>
           <div className="flex flex-col">
@@ -57,7 +57,7 @@ export default function Home() {
           <div className="flex flex-col">
             <label className={s.label}>Contract ABI</label>
             <textarea
-              rows={15}
+              rows={16}
               className={s.input}
               placeholder={sampleABI}
               {...register("abi", {
@@ -68,12 +68,14 @@ export default function Home() {
             <span className={s.error}>{formErrors.abi?.message}</span>
           </div>
 
-          <button
-            type="submit"
-            className="inline-flex justify-center items-center py-2.5 px-4 font-medium  text-white bg-blue-700 rounded-lg focus:ring-4 focus:ring-blue-200 dark:focus:ring-blue-900 hover:bg-blue-800 "
-          >
-            Submit
-          </button>
+          <div className="">
+            <button
+              type="submit"
+              className="w-full lg:w-1/2 lg:max-w-[15em] inline-flex justify-center items-center py-2.5 px-4 font-medium text-white bg-blue-700 rounded-lg focus:ring-4 focus:ring-blue-200 dark:focus:ring-blue-900 hover:bg-blue-800"
+            >
+              Submit
+            </button>
+          </div>
         </form>
       </div>
 

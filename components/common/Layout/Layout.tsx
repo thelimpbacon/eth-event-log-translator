@@ -14,7 +14,7 @@ const Layout = ({ children }: LayoutProps): JSX.Element => {
 
   return (
     <div className="bg-[#111827]">
-      <main className="px-8 py-8 lg:py-14 h-screen">{children}</main>
+      <main className="px-8 py-8 lg:py-14">{children}</main>
     </div>
   );
 };
