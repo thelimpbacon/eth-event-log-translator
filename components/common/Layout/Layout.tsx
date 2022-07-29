@@ -13,7 +13,7 @@ const Layout = ({ children }: LayoutProps): JSX.Element => {
   useInactiveListener(!triedEager);
 
   return (
-    <div className="bg-[#000611]">
+    <div className="bg-[#111827]">
       <main className="px-8 py-8 lg:py-14">{children}</main>
     </div>
   );

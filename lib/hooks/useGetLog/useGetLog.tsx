@@ -1,11 +1,10 @@
-import React, { useCallback, useState } from "react";
+import { useCallback, useState } from "react";
 import { ethers } from "ethers";
-import { Contract } from "@ethersproject/contracts";
 import { useWeb3 } from "../useWeb3";
 
 interface GetLogProps {
   contractAddress: string;
-  transaction: string;
+  transactionHash: string;
   abi: string;
 }
 
@@ -16,16 +15,16 @@ const useGetLog = () => {
   const [errors, setErrors] = useState<any>();
 
   const getReceipt = useCallback(
-    async ({ contractAddress, transaction, abi }: GetLogProps) => {
+    async ({ contractAddress, transactionHash, abi }: GetLogProps) => {
       setErrors(undefined);
       setLogs(undefined);
       setReceipt(undefined);
 
-      if (!contractAddress || !abi || !library || !transaction) {
+      if (!contractAddress || !abi || !library || !transactionHash) {
         return null;
       }
       try {
-        const receipt = await library.getTransactionReceipt(transaction);
+        const receipt = await library.getTransactionReceipt(transactionHash);
         setReceipt(receipt);
 
         let iface = new ethers.utils.Interface(abi);
