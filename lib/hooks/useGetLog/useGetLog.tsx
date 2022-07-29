@@ -38,7 +38,7 @@ const useGetLog = () => {
             parsedEvents.push(ethersParsed);
           } catch (error) {
             setLogs(undefined);
-            setReceipt(undefined);
+            // setReceipt(undefined);
             setErrors(error);
           }
         }

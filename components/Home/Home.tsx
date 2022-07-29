@@ -3,6 +3,7 @@ import { useForm, SubmitHandler } from "react-hook-form";
 import { isAddress } from "ethers/lib/utils";
 import { useGetLog } from "@lib/hooks";
 import s from "./Home.module.css";
+import { Result } from "@components/common";
 
 export type FormInputs = {
   contractAddress: string;
@@ -23,7 +24,7 @@ export default function Home() {
   };
 
   return (
-    <div className="h-full grid w-full grid-cols-3 text-white gap-6">
+    <div className="h-[90vh] grid w-full grid-cols-3 text-white gap-6">
       <div>
         <form className="flex flex-col gap-4 col-span-1" onSubmit={handleSubmit(onSubmit)}>
           <div className="flex flex-col">
@@ -74,18 +75,11 @@ export default function Home() {
             Submit
           </button>
         </form>
-
-        <div className="text-red-600 mt-6">{JSON.stringify(errors, null, 2)}</div>
       </div>
 
-      <div className="grid grid-cols-2 col-span-2 h-full">
-        <div className="border border-gray-500 whitespace-pre-wrap overflow-hidden h-full overflow-y-scroll ">
-          {JSON.stringify(receipt, null, 2)}
-        </div>
-        <div className="border border-gray-500 whitespace-pre-wrap overflow-hidden h-full overflow-y-scroll">
-          {JSON.stringify(logs, null, 2)}
-        </div>
-      </div>
+      <Result label="Receipt" result={receipt} />
+
+      <Result label="Logs" result={logs} />
     </div>
   );
 }
