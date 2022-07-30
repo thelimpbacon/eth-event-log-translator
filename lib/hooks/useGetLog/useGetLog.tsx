@@ -1,6 +1,6 @@
 import { useCallback, useState } from "react";
-import { ethers } from "ethers";
 import { useWeb3 } from "../useWeb3";
+import eventParser from "@lib/utils/eventParser";
 
 interface GetLogProps {
   contractAddress: string;
@@ -12,11 +12,11 @@ const useGetLog = () => {
   const { library } = useWeb3();
   const [receipt, setReceipt] = useState<any>();
   const [logs, setLogs] = useState<any>();
-  const [errors, setErrors] = useState<any>();
+  const [errors, setErrors] = useState<{ receipt: any; logs: any }>({ receipt: null, logs: null });
 
   const getReceipt = useCallback(
     async ({ contractAddress, transactionHash, abi }: GetLogProps) => {
-      setErrors(undefined);
+      setErrors({ receipt: null, logs: null });
       setLogs(undefined);
       setReceipt(undefined);
 
@@ -26,29 +26,16 @@ const useGetLog = () => {
       try {
         const receipt = await library.getTransactionReceipt(transactionHash);
         setReceipt(receipt);
-
-        let iface = new ethers.utils.Interface(abi);
-        if (receipt.logs.length === 0) return;
-
-        let parsedEvents = [];
-
-        for (let event of receipt.logs) {
-          try {
-            const ethersParsed = iface.parseLog(event);
-            parsedEvents.push(ethersParsed);
-          } catch (error) {
-            setLogs(undefined);
-            // setReceipt(undefined);
-            setErrors(error);
-          }
-        }
-
-        setLogs(parsedEvents);
       } catch (error) {
-        console.error(error);
-        setLogs(undefined);
-        setReceipt(undefined);
-        setErrors(error);
+        setErrors({ receipt: error, logs: error }); // if reciept fails, set error on logs as well then bounce
+        return;
+      }
+
+      try {
+        const logs = eventParser(receipt, abi);
+        setLogs(logs);
+      } catch (error) {
+        setErrors({ ...errors, logs: error });
       }
     },
     [library]

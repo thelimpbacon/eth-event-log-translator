@@ -79,9 +79,9 @@ export default function Home() {
         </form>
       </div>
 
-      <Result label="Receipt" result={receipt} />
+      <Result label="Receipt" result={receipt} error={errors.receipt} />
 
-      <Result label="Logs" result={logs} />
+      <Result label="Logs" result={logs} error={errors.logs} />
     </div>
   );
 }
