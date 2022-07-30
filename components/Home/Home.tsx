@@ -1,9 +1,10 @@
 import React from "react";
 import { useForm, SubmitHandler } from "react-hook-form";
 import { isAddress } from "ethers/lib/utils";
+import cn from "classnames";
+import { Result } from "@components/common";
 import { useGetLog } from "@lib/hooks";
 import s from "./Home.module.css";
-import { Result } from "@components/common";
 
 export type FormInputs = {
   contractAddress: string;
@@ -22,7 +23,7 @@ export default function Home() {
   const onSubmit: SubmitHandler<FormInputs> = (data) => {
     getReceipt(data);
   };
-
+  console.log(!!formErrors.contractAddress?.message);
   return (
     <div className="md:h-[90vh] grid w-full grid-cols-1 lg:grid-cols-3 text-white gap-6">
       <div>
@@ -30,7 +31,10 @@ export default function Home() {
           <div className="flex flex-col">
             <label className={s.label}>Contract address</label>
             <input
-              className={s.input}
+              className={cn(s.inputBase, {
+                [s.inputNormal]: !formErrors.contractAddress?.message,
+                [s.inputError]: formErrors.contractAddress?.message,
+              })}
               placeholder="0x90b1cba89ecc85d950c4ca4ae0e077fcabb19f93"
               {...register("contractAddress", {
                 required: { value: true, message: "This is required" },
@@ -44,7 +48,10 @@ export default function Home() {
           <div className="flex flex-col">
             <label className={s.label}>Transaction hash</label>
             <input
-              className={s.input}
+              className={cn(s.inputBase, {
+                [s.inputNormal]: !formErrors.transactionHash?.message,
+                [s.inputError]: formErrors.transactionHash?.message,
+              })}
               placeholder="0x601f30208c2e1bc28649ce37433e44a0ea4e6d4da38420dbd1b3ecf2694ed98f"
               {...register("transactionHash", {
                 required: { value: true, message: "This is required" },
@@ -58,7 +65,10 @@ export default function Home() {
             <label className={s.label}>Contract ABI</label>
             <textarea
               rows={16}
-              className={s.input}
+              className={cn(s.inputBase, {
+                [s.inputNormal]: !formErrors.abi?.message,
+                [s.inputError]: formErrors.abi?.message,
+              })}
               placeholder={sampleABI}
               {...register("abi", {
                 required: { value: true, message: "This is required" },
